@@ -99,7 +99,7 @@ for state in states:
     # Build a forecasting model.
     sales_model = pm.auto_arima(
         series.total_sales,
-        #X=month_effects,
+        X=month_effects,
         start_p=0,
         d=0,
         start_q=0,
@@ -107,7 +107,6 @@ for state in states:
         max_d=6,
         max_q=6,
         seasonal=True,
-        stepwise=True,
         start_P=0,
         D=0,
         start_Q=0,
@@ -121,8 +120,8 @@ for state in states:
     # Forecast sales.
     sales_forecast, sales_conf = forecast_arima(
         sales_model,
-        forecast_horizon#,
-        #X=forecast_month_effects
+        forecast_horizon,
+        X=forecast_month_effects
     )
     
     # Record the forecast.
@@ -151,7 +150,7 @@ for state in states:
     forecasts['{}_forecast'.format(state.lower())].plot(color=color, linestyle='--', label=f'{state} Forecast')
 yaxis_format = FuncFormatter(format_millions)
 ax.yaxis.set_major_formatter(yaxis_format)
-plt.title('Monthly Forecasted Cannabis Sales by State - X=None')
+plt.title('Monthly Forecasted Cannabis Sales by State')
 plt.legend()
 plt.savefig(
     'figures/state_cannabis_sales_forecast.png',
